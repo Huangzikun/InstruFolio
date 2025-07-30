@@ -5,7 +5,19 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard-to-guess-string'
+    # 新增：添加CSRF所需的密钥配置
+    SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev-secret-key-for-development-only'
+    ARK_API_KEY = os.getenv('ARK_API_KEY', '')
+    ACCESS_KEY = os.getenv('ACCESS_KEY', '')
+
+    # 新增：全局禁用CSRF保护（纯后端API无需CSRF）
+    WTF_CSRF_ENABLED = False
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        'pool_recycle': 3600,
+        'pool_pre_ping': True
+    }
+
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ENGINE_OPTIONS = {
         'pool_recycle': 3600,
